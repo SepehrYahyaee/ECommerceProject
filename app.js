@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { userRoutes, productRoutes, categoryRoutes, commentRoutes } = require('./routes');
+const { userRoutes, productRoutes, categoryRoutes, commentRoutes, cartRoutes } = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -11,6 +11,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/carts', cartRoutes); // empty
 
 app.get('/', (req, res) => {
     res.send('Salam');

@@ -8,7 +8,7 @@ class ProductService {
     }
 
     async retrieveProductsWithPagination(page, count){
-        const selectObject = { productName: true, price: true };
+        const selectObject = { productId: true, productName: true, price: true };
         if (page && count){
             if (+page === 1) return await this.db.product.findMany({ skip: 0, take: +count, select: selectObject });
             else {return await this.db.product.findMany({
@@ -22,15 +22,15 @@ class ProductService {
     }
 
     async getProductById(id){
-        return await db.product.findUnique({where: {productId: id}});
+        return await this.db.product.findUnique({where: {productId: id}});
     }
 
     async updateProductById(productId, fieldsforUpdate){
-        return await this.db.update({where: {productId}, data: {...fieldsforUpdate}});
+        return await this.db.product.update({where: {productId}, data: {...fieldsforUpdate}});
     }
 
     async deleteProductById(productId){
-        return await this.db.delete({where: {productId}});
+        return await this.db.product.delete({where: {productId}});
     }
 }
 

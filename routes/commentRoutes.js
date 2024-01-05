@@ -1,5 +1,5 @@
 const express = require('express');
-const { authentication } = require('../middlewares');
+const { authentication, isAdmin } = require('../middlewares');
 const { commentControllers } = require('../controllers');
 
 const router = express.Router(); // /api/comments

@@ -3,7 +3,7 @@ const commentService = new CommentService();
 
 async function createComment(req, res){
     const {message, rating, onProduct} = req.body; //TODO: validation
-    const createdComment = await commentService.createComment(message, rating, onProduct, req.user.userId);
+    const createdComment = await commentService.createComment(message, rating, req.user.userId, onProduct);
     res.status(201).send(createdComment);
 }
 
@@ -28,7 +28,7 @@ async function retrieveSpecificComment(req, res){
 }
 
 async function updateComment(req, res){ //TODO: validation - rating + message can be updated
-    const comment = await commentService.retrieveCommentById(req.params.id);
+    const comment = await commentService.retrieveCommentById(req.params.commentId);
     if (comment.byUser === req.user.userId){
         const fieldsForUpdate = {...req.body};
         const updatedComment = await commentService.updateComment(req.params.commentId, fieldsForUpdate);
@@ -39,9 +39,9 @@ async function updateComment(req, res){ //TODO: validation - rating + message ca
 }
 
 async function deleteComment(req, res){
-    const comment = await commentService.retrieveCommentById(req.params.id);
+    const comment = await commentService.retrieveCommentById(req.params.commentId);
     if (comment.byUser === req.user.userId){
-        const deletedComment = await commentService.deleteComment(req.params.id);
+        const deletedComment = await commentService.deleteComment(req.params.commentId);
         res.status(204).send(deletedComment);
     } else {
         throw new Error('not the Owner of the comment!');

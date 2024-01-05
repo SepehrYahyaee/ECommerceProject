@@ -1,9 +1,10 @@
 async function isAdmin(req, res, next){
     try {
-        if (req.user.role !==  'Admin' || req.user.role !== 'Owner') {
+        if (req.user.role === 'User') {
             throw new Error('not Authorized - nor admin nor owner!');
+        } else {
+            next();
         }
-        next();
     } catch (error) {
         throw new Error(error);
     }

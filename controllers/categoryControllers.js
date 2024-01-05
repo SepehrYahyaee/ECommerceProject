@@ -19,12 +19,12 @@ async function retrieveSpecificCategory(req, res){
 
 async function updateCategory(req, res){
     const fieldsforUpdate = {...req.body}; //TODO: validation + chizai ke mitune update beshe !
-    const updatedCategory = await categoryService.updateCategoryById(req.params.id, fieldsforUpdate);
+    const updatedCategory = await categoryService.updateCategoryById(req.params.categoryId, fieldsforUpdate);
     res.status(201).send(`updateCategory: ${JSON.stringify(updatedCategory)}`);
 }
 
 async function deleteCategory(req, res){
-    await categoryService.deleteCategoryById(req.params.id);
+    await categoryService.deleteCategoryById(req.params.categoryId);
     res.status(204).send('Successfully Deleted!');
 }
 

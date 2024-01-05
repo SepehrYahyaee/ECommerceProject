@@ -26,7 +26,7 @@ async function updateProduct(req, res){
 }
 
 async function deleteProduct(req, res){
-    await productService.deleteProductById(req.params.id);
+    await productService.deleteProductById(req.params.productId);
     res.status(204).send('Successfully Deleted!');
 }
 

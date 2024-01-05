@@ -1,12 +1,14 @@
 const bc = require('bcrypt');
-const { UserService } = require('../services');
+const { UserService, CartService } = require('../services');
 const { createToken, hashPassword } = require('../utilities');
 const userService = new UserService();
+const cartService = new CartService();
 
 async function register(req, res){ // createUser Sabeq
     const hashedPassword = await hashPassword(req.body.password);
     const createdUser = await userService.createUser(req.body.userName, hashedPassword);
-    res.status(201).send(createdUser);
+    const createdCart = await cartService.createCart(createdUser.userId);
+    res.status(201).send({createdUser, createdCart});
 }
 
 async function login(req, res){

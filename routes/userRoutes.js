@@ -1,6 +1,6 @@
 const express = require('express');
 const { authentication } = require('../middlewares');
-const { userControllers } = require('../controllers');
+const { userControllers, cartControllers } = require('../controllers');
 const router = express.Router(); // /api/user
 
 router.route('/register')
@@ -10,11 +10,14 @@ router.route('/login')
     .post(userControllers.login);
 
 router.route('/users')
-    .get(userControllers.retrieveAllUsers)
+    .get(authentication, userControllers.retrieveAllUsers)
     .put(authentication, userControllers.updateUser)
     .delete(authentication, userControllers.deleteUser);
 
 router.route('/users/:id')
-    .get(userControllers.retrieveSpecificUser)
+    .get(userControllers.retrieveSpecificUser);
+
+router.route('/myCart')
+    .get(authentication, cartControllers.showCart);
 
 module.exports = router;

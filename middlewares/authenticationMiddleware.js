@@ -10,8 +10,10 @@ async function authentication(req, res, next){
         const payload = jwt.verify(token, process.env.SECRET_KEY);
         if (payload){
             req.user = await userService.getUserByUserName(payload.userName);
+            next();
+        } else {
+            throw new Error('token needed');
         }
-        next();
     } catch (error) {
         throw new Error(error);
     }
