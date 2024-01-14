@@ -26,3 +26,5 @@ app.get('/', (req, res) => {
 app.all('*', (req, res) => {res.send('404 - NOT FOUND')});
 
 app.listen(PORT, () => {console.log(`server is running on port: ${PORT} !`)});
+
+// CART + ORDER CRUD mikhaim!
