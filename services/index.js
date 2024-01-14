@@ -4,3 +4,5 @@ exports.ProductService = require('./productServices.js');
 exports.CategoryService = require('./categoryServices.js');
 exports.CommentService = require('./commentServices.js');
 exports.CartService = require('./cartServices.js');
+exports.ProfileService = require('./profileServices.js');
+exports.AdminService = require('./adminServices.js');

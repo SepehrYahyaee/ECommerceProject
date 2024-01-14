@@ -2,13 +2,17 @@ const { ProductService } = require('../services');
 const productService = new ProductService();
 
 async function createProduct(req, res){
-    const productDetails = {...req.body}; //TODO: validation (productName + price + count ejbarie)
+    const { count } = req.body;
+    const productDetails = {...req.body};
+    if (count){
+        productDetails.count = +count;
+    }
     const createdProduct = await productService.createProduct(productDetails);
     res.status(201).send(createdProduct);
 }
 
 async function productList(req, res){
-    const { page, count } = req.query; //TODO: validation - faqat page o count ghabule
+    const { page, count } = req.query;
     const products = await productService.retrieveProductsWithPagination(page, count);
     res.status(200).send(products);
 }
@@ -20,7 +24,11 @@ async function productDetails(req, res){
 }
 
 async function updateProduct(req, res){
-    const fieldsforUpdate = {...req.body}; //TODO: validation + chizai ke mitune update beshe !
+    const { count } = req.body;
+    const fieldsforUpdate = {...req.body};
+    if (count){
+        fieldsforUpdate.count = +count;
+    }
     const updatedProduct = await productService.updateProductById(req.params.productId, fieldsforUpdate);
     res.status(201).send(`updateProduct: ${JSON.stringify(updatedProduct)}`);
 }

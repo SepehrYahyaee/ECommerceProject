@@ -1,19 +1,15 @@
 const { CommentService } = require('../services');
-const commentService = new CommentService();
+const { AppError } = require('../providers');
+const commentService = new CommentService(); //admin panel should have an option to see all comments!
 
 async function createComment(req, res){
-    const {message, rating, onProduct} = req.body; //TODO: validation
-    const createdComment = await commentService.createComment(message, rating, req.user.userId, onProduct);
+    const {message, rating} = req.body;
+    const createdComment = await commentService.createComment(message, rating, req.user.userId, req.params.productId);
     res.status(201).send(createdComment);
 }
 
-async function retrieveAllComments(req, res){ //TODO: pagination
-    const allComments = await commentService.retrieveAllComments()
-    res.status(200).send(allComments);
-}
-
 async function retrieveCommentsByUser(req, res){
-    const commentsByUser = await commentService.retrieveCommentsByUserId(req.params.userId);
+    const commentsByUser = await commentService.retrieveCommentsByUserId(req.user.userId);
     res.status(200).send(commentsByUser);
 }
 
@@ -27,14 +23,14 @@ async function retrieveSpecificComment(req, res){
     res.status(200).send(specificComment);
 }
 
-async function updateComment(req, res){ //TODO: validation - rating + message can be updated
+async function updateComment(req, res){
     const comment = await commentService.retrieveCommentById(req.params.commentId);
     if (comment.byUser === req.user.userId){
         const fieldsForUpdate = {...req.body};
         const updatedComment = await commentService.updateComment(req.params.commentId, fieldsForUpdate);
         res.status(201).send(updatedComment);
     } else {
-        throw new Error('not the Owner of the comment!');
+        throw new AppError('not the Owner of the comment!', 401);
     }
 }
 
@@ -44,13 +40,12 @@ async function deleteComment(req, res){
         const deletedComment = await commentService.deleteComment(req.params.commentId);
         res.status(204).send(deletedComment);
     } else {
-        throw new Error('not the Owner of the comment!');
+        throw new AppError('not the Owner of the comment!', 401);
     }
 }
 
 module.exports = {
     createComment,
-    retrieveAllComments,
     retrieveCommentsByUser,
     retrieveCommentsOnProduct,
     retrieveSpecificComment,

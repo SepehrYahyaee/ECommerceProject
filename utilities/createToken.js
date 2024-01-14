@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { AppError } = require('../providers');
 const { TokenService } = require('../services');
 const tokenService = new TokenService();
 
@@ -13,7 +14,7 @@ async function createToken(payload, secretKey, accessExpireTime, refreshExpireTi
     
         return {refreshToken, accessToken};
     } catch (error) {
-        throw new Error(error);
+        throw new AppError(error, 500);
     }
 }
 

@@ -3,8 +3,8 @@ const prisma = require('../db.js');
 class UserService {
     db = prisma;
 
-    async createUser(userName, password){
-        return await this.db.user.create({data: {userName, password}});
+    async createUser(userName, password, email){
+        return await this.db.user.create({data: {userName, password, email}});
     }
 
     async getAllUsers(){
@@ -16,7 +16,7 @@ class UserService {
     }
 
     async getUserById(id){
-        return await this.db.user.findUnique({where: {userId: id}, select: {userId: true, userName: true}});
+        return await this.db.user.findUnique({where: {userId: id}, select: {userName: true, email: true}});
     }
 
     async updateUserById(id, fieldsforUpdate){

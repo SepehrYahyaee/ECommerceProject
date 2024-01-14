@@ -1,12 +1,14 @@
+const { AppError } = require('../providers');
+
 async function isAdmin(req, res, next){
     try {
         if (req.user.role === 'User') {
-            throw new Error('not Authorized - nor admin nor owner!');
+            throw new AppError('not Authorized - nor admin nor owner!', 401);
         } else {
             next();
         }
     } catch (error) {
-        throw new Error(error);
+        next(error);
     }
 }
 
