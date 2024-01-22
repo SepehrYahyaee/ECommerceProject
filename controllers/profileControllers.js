@@ -1,7 +1,7 @@
 const { ProfileService } = require('../services');
 const profileService = new ProfileService();
 
-async function showProfile(req, res){ //more fields needed: Order History + All my Comments!
+async function showProfile(req, res){ //more fields needed: Order History!
     const profile = await profileService.getProfileByUserId(req.user.userId);
     res.status(200).send(profile);
 }

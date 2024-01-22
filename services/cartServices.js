@@ -30,7 +30,8 @@ class CartService {
             include: {
                 product: {
                     select: {
-                        productName: true
+                        productName: true,
+                        price: true
                     }
                 }
             }
@@ -38,19 +39,49 @@ class CartService {
     }
 
     async updateCart(cartId, productId, count){
-        return await this.db.productToCart.update({
+        const cart = await this.db.productToCart.findMany({
+            where:{
+                productId,
+                cartId
+            }});
+        const product = await this.db.productToCart.findMany({
             where: {
-                cartId,
-                productId
-            },
-            data: {
-                count: +count + (count)
-            }
-        })
+                productId,
+                cartId
+            }});
+            console.log(count);
+        if (count === -1 && +product[0].count === 1){
+            return null;
+        } else {
+            return await this.db.productToCart.updateMany({
+                where: {
+                    productId,
+                    cartId
+                },
+                data: {
+                    count: +(cart[0].count) + +(count)
+                }
+            });
+        }
     }
 
     async deleteItemInCart(cartId, productId){
         return await this.db.productToCart.delete({where: {cartId, productId}});
+    }
+
+    async deleteAllItemsInCart(cartId){
+        return await this.db.productToCart.deleteMany({where: {cartId}});
+    }
+
+    async getAllProductInUserCart(userId){
+        const cart = await this.getCartByUserId(userId)
+        return await this.db.productToCart.findMany({where: {cartId: cart.cartId}, include: {
+            product: {
+                select: {
+                    price: true
+                }
+            }
+        }});
     }
 }
 

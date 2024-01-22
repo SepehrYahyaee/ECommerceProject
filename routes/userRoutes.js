@@ -1,6 +1,12 @@
 const express = require('express');
-const { authentication, isAdmin, validators, EH } = require('../middlewares');
-const { userControllers, cartControllers, profileControllers, commentControllers } = require('../controllers');
+const { authentication, validators, EH } = require('../middlewares');
+const { 
+    userControllers,
+    cartControllers,
+    profileControllers,
+    commentControllers,
+    orderControllers } = require('../controllers');
+
 const router = express.Router(); // /api/user
 
 router.route('/register')
@@ -72,11 +78,17 @@ router.route('/myProfile/myComments/:commentId')
         authentication,
         EH.asyncErrorHandler(commentControllers.deleteComment)
     );
-//-------------------------------------------------------------------------
-router.route('/myCart') // TEST ALL CART API's
+
+router.route('/myCart')
     .get(
         authentication,
         EH.asyncErrorHandler(cartControllers.showCart)
+    )
+    .post(
+        authentication,
+        ...validators.createOrderValidators,
+        validators.validationErrorHandler,
+        EH.asyncErrorHandler(orderControllers.createOrder)
     )
     .put(
         authentication,
@@ -89,7 +101,40 @@ router.route('/myCart') // TEST ALL CART API's
         ...validators.deleteProductInCartValidators,
         validators.validationErrorHandler,
         EH.asyncErrorHandler(cartControllers.deleteProductInCart)
+    );
+
+router.route('myCart/deleteAll')
+    .post(
+            authentication,
+            EH.asyncErrorHandler(cartControllers.deleteAllProductsInCart)
+    );
+
+router.route('/activeOrders')
+    .get(
+        authentication,
+        EH.asyncErrorHandler(orderControllers.myActiveOrders)
+    );
+
+router.route('/activeOrders/:orderId')
+    .get(
+        authentication,
+        ...validators.specificOrderValidatorsAndDelete,
+        validators.validationErrorHandler,
+        EH.asyncErrorHandler(orderControllers.specificOrder)
     )
-    // MAKE IT AN ORDER! 
+    .delete(
+        authentication,
+        ...validators.specificOrderValidatorsAndDelete,
+        validators.validationErrorHandler,
+        EH.asyncErrorHandler(orderControllers.deleteOrder)
+    );
+
+router.route('/activeOrders/:orderId/pay')
+    .post(
+        authentication,
+        ...validators.payValidators,
+        validators.validationErrorHandler,
+        EH.asyncErrorHandler(orderControllers.pay)
+    );
 
 module.exports = router;

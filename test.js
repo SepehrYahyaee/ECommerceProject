@@ -1,30 +1,32 @@
 const db = require('./db.js');
-const { hashPassword } = require('.//utilities')
-const { CartService, ProfileService } = require('./services');
+// const { hashPassword } = require('.//utilities')
+// const { CartService, ProfileService } = require('./services');
 
-const cartService = new CartService();
-const profileService = new ProfileService();
+const authentication = require("./middlewares/authenticationMiddleware");
 
-// async function addtoCart(cartId, productId, count){
-//     await db.productToCart.create({
-//         data: {
-//             cartId,
-//             productId,
-//             count
-//         }
-//     })
+// const cartService = new CartService();
+// const profileService = new ProfileService();
+
+// // async function addtoCart(cartId, productId, count){
+// //     await db.productToCart.create({
+// //         data: {
+// //             cartId,
+// //             productId,
+// //             count
+// //         }
+// //     })
+// // }
+
+// async function superUser(){
+//     const password = "1234"
+//     const createdUser = await db.user.create({data: {
+//         userName: "Sepehr",
+//         password: await hashPassword(password),
+//         email: "Sepehr@gmail.com",
+//         role: "Owner"
+//     }})
+//     await cartService.createCart(createdUser.userId);
+//     await profileService.createProfile(createdUser.userId);
 // }
 
-async function superUser(){
-    const password = "1234"
-    const createdUser = await db.user.create({data: {
-        userName: "Sepehr",
-        password: await hashPassword(password),
-        email: "Sepehr@gmail.com",
-        role: "Owner"
-    }})
-    await cartService.createCart(createdUser.userId);
-    await profileService.createProfile(createdUser.userId);
-}
-
-superUser(); // manually add the superadmin
+// superUser(); // manually add the superadmin
